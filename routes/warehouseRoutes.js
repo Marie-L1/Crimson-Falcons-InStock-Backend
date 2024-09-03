@@ -16,4 +16,5 @@ router.get("/warehouses", async (req, res) => {
     }
 })
 
+
 export default router;
