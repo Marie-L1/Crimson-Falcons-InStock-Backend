@@ -1,12 +1,13 @@
 import express from "express";
 import cors from "cors";
+import knex from "knex";
 import config from "./knexfile.js"
 import "dotenv/config";
 
-const knex = initKnex(config);
+const knexDb = knex(config.development);
 const app = express();
 
-import router from "./routes/"  // add route file 
+import router from "./routes/apiRoutes.js"  // add route file 
 
 const { PORT, CORS_ORIGIN } = process.env;
 
