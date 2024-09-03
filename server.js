@@ -5,7 +5,7 @@ import "dotenv/config";
 
 const app = express();
 
-import router from "./routes/"  // add routes file
+import router from "./routes/"  // add route file into folder
 
 const { PORT, CORS_ORIGIN } = process.env;
 
