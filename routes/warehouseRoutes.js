@@ -20,7 +20,7 @@ router.get("/warehouses", async (req, res) => {
 // GET a single warehouse
 router.get("/warehouses/:id", async (req, res) => {
     try{
-        // request params - extract the id
+        // request params -> extract the id
         const { id } = req.params;
 
         // query for warehouse
