@@ -4,14 +4,14 @@ const router = express.Router();
 
 // GET all the routes to the warehouses
 router.get("/warehouses", async (req, res) => {
-    try{
+    try {
         // query the db for all warehouses - uses req.knexDb for queries
         const warehouses = await req.knexDb("warehouses").select("*");
-        
+
         // respond with 200 status and data
         res.status(200).json(warehouses)
 
-    }catch{
+    } catch {
         res.status(500).send("Error fetching warehouses")
     }
 });
@@ -19,7 +19,7 @@ router.get("/warehouses", async (req, res) => {
 
 // GET a single warehouse
 router.get("/warehouses/:id", async (req, res) => {
-    try{
+    try {
         // request params -> extract the id
         const { id } = req.params;
 
@@ -27,24 +27,24 @@ router.get("/warehouses/:id", async (req, res) => {
         const warehouse = await req.knexDb("warehouses").where({ id }).first();
 
         // Validation - check if the warehouse id was found
-        if(!warehouse){
+        if (!warehouse) {
             return res.status(404).send("Warehouse id not found");
         }
 
         res.status(200).json(warehouse)
-    }catch(error){
+    } catch (error) {
         console.error("Error fetching warehouse", error)
         res.status(500).send("Error fetching warehouse")
     }
 });
 
 // POST/CREATE a new warehouse
-router.post("/warehouses", async (req, res) =>{
-    try{
-        const {warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email} = req.body;
+router.post("/warehouses", async (req, res) => {
+    try {
+        const { warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email } = req.body;
 
-         // Check for missing properties
-         if (!warehouse_name || !address || !city || !country || !contact_name || !contact_position || !contact_email || !contact_phone) {
+        // Check for missing properties
+        if (!warehouse_name || !address || !city || !country || !contact_name || !contact_position || !contact_email || !contact_phone) {
             return res.status(400).send("Error: Missing properties");
         }
 
@@ -67,11 +67,31 @@ router.post("/warehouses", async (req, res) =>{
 
         res.status(201).json(newWarehouse);
 
-    }catch(error){
+    } catch (error) {
         console.error("Error catching warehouse", error);
         res.status(400).send("Error creating warehouse");
     }
 });
 
+router.delete('/warehouses/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Check if the warehouse exists
+        const warehouse = await req.knexDb('warehouses').where({ id }).first();
+
+        if (!warehouse) {
+            return res.status(404).send('Warehouse ID not found');
+        }
+
+        // Delete the warehouse and associated inventory items (handled by ON DELETE CASCADE)
+        await req.knexDb('warehouses').where({ id }).del();
+
+        return res.status(204).send(); // No content response on successful deletion
+    } catch (error) {
+        console.error('Error deleting warehouse:', error);
+        res.status(500).send('Error deleting warehouse');
+    }
+});
 
 export default router;
