@@ -4,6 +4,7 @@ import knex from "knex";
 import config from "./knexfile.js";
 import "dotenv/config";
 import warehouseRoutes from "./routes/warehouseRoutes.js";
+import inventoryRoutes from "./routes/inventoryRoutes.js";
 
 // Initialize Knex with the development configuration
 const knexDb = knex(config.development);
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
 
 // Use routes
 app.use("/api", warehouseRoutes); 
+app.use("/api", inventoryRoutes); 
 
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
