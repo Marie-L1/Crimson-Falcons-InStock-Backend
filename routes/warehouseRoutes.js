@@ -11,8 +11,25 @@ router.get("/warehouses", async (req, res) => {
         // respond with 200 status and data
         res.status(200).json(warehouses)
 
+    }catch{
+        res.status(500).send("Error fetching warehouses")
+    }
+});
+
+
+// GET a single warehouse
+router.get("/warehouses/:id", async (req, res) => {
+    try{
+        // request params - extract the id
+        const { id } = req.params;
+
+        // query for warehouse
+        const warehouse = await req.knexDb("warehouses").where({ id }).first();
+
+        res.status(200).json(warehouse)
     }catch(error){
-        console.error("Error fetching the warehouses", error);
+        console.error("Error fetching warehouse", error)
+        res.status(500).send("Error fetching warehouse")
     }
 })
 
