@@ -159,4 +159,3 @@ router.delete('/inventories/:id', async (req, res) => {
 });
 
 export default router;
-
