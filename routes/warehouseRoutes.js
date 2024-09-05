@@ -144,7 +144,7 @@ router.delete('/warehouses/:id', async (req, res) => {
     }
 });
 
-//aaaa
+//GET inventories by warehouse id
 router.get('/warehouses/:id/inventories', async (req, res) => {
     try {
         const { warehouseId } = req.params;
@@ -156,7 +156,8 @@ router.get('/warehouses/:id/inventories', async (req, res) => {
 
         const warehouseInventories = await req.knexDb('inventories').where({ warehouse_id:warehouse[0].id }).select("*")
         res.status(200).send(warehouseInventories);
-    } catch {
+    } catch (error) {
+        console.error('Error getting warehouse by inventory', error);
         res.status(500).send('Error getting warehouse by inventory');
     }
 });
