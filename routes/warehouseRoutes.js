@@ -24,7 +24,29 @@ router.get("/warehouses", async (req, res) => {
     }
 });
 
-// GET a single warehouse by ID
+// Search route to satisfy query
+router.get("/warehouses/search", async (req, res) => {
+    try {
+        const query = req.query.query; // Extract query parameter from the query string
+        if (!query) {
+            return res.status(400).json({ error: 'Query parameter "query" is required' });
+        }
+        const matches = await req.knexDb("warehouses").select("*")
+            .where('warehouses.warehouse_name', 'like', `%${query}%`) 
+            .orWhere('warehouses.id', 'like', `%${query}%`)
+            .orWhere('warehouses.address', 'like', `%${query}%`)
+            .orWhere('warehouses.country', 'like', `%${query}%`)
+            .orWhere('warehouses.contact_name', 'like', `%${query}%`)
+            .orWhere('warehouses.contact_position', 'like', `%${query}%`)
+            .orWhere('warehouses.contact_email', 'like', `%${query}%`);
+        res.status(200).json(matches);
+    } catch (error) {
+        console.error('Error querying inventories:', error);
+        res.status(500).json({ error: 'Error querying inventories' });
+    }
+});
+
+// GET a single warehouse
 router.get("/warehouses/:id", async (req, res) => {
     try {
         const { id } = req.params;
