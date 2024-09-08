@@ -4,7 +4,7 @@ const router = express.Router();
 
 // Utility function to validate phone numbers and emails
 const isValidPhoneNumber = (phone) => {
-    const phoneRegex = /^\+?[1-9]\d{1,14}$/; // E.164 format for international numbers
+    const phoneRegex = /^\+?[1-9]\d{0,2}[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}$/; // E.164 format for international numbers
     return phoneRegex.test(phone);
 };
 
